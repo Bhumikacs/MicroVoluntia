@@ -89,7 +89,7 @@ document.getElementById("submitForm").addEventListener("submit", async (e) => {
   const formData = new FormData(e.target);
   formData.append("user", JSON.stringify(user));
 
-  const res = await fetch("/submit",{ method:"POST", body: formData });
+  const res = await fetch("https://microvoluntia-lfxx.onrender.com/submit",{ method:"POST", body: formData });
   const data = await res.json();
   if(!res.ok){ document.getElementById("responseMsg").innerHTML=`<div class="alert alert-danger">${data.message}</div>`; return; }
 
@@ -177,3 +177,4 @@ ctx.fillText(formData.get("taskName"), canvas.width/2, ribbonY + 55);
 
 </body>
 </html>
+
