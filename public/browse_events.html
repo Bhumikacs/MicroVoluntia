@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Events - MicroVoluntia</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #f9fbff;
+    }
+    .event-card {
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+    .event-card:hover {
+      transform: translateY(-5px);
+    }
+    .event-img {
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="index.html">
+      <img src="images/logo.png" width="40" class="me-2">
+      <span style="color:#0d6efd;">Micro</span>Voluntia
+    </a>
+    <div>
+      <a href="home.html" class="btn btn-outline-primary">Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Title -->
+<section class="text-center p-4 bg-light">
+  <h2 class="fw-bold">Browse Upcoming Events</h2>
+  <p class="text-muted">Find upcoming events and opportunities to volunteer.</p>
+</section>
+
+<!-- Events Grid -->
+<div class="container py-5">
+  <div class="row g-4" id="eventsGrid">
+    <!-- Events will be injected here -->
+  </div>
+</div>
+
+<script>
+  async function loadEvents() {
+    try {
+      // Use full server URL
+      const res = await fetch("https://microvoluntia-lfxx.onrender.com/events");
+      const events = await res.json();
+      const eventsGrid = document.getElementById("eventsGrid");
+
+      eventsGrid.innerHTML = ""; // clear existing content
+
+      events.forEach(event => {
+        const eventCard = document.createElement("div");
+        eventCard.className = "col-md-4";
+
+        const eventHTML = `
+          <div class="card event-card">
+            <img src="${event.imageUrl ? 'https://microvoluntia-lfxx.onrender.com' + event.imageUrl : 'images/placeholder.png'}" class="event-img" alt="${event.name}">
+            <div class="card-body">
+              <h5 class="card-title">${event.name}</h5>
+              <p class="card-text text-muted">📍 ${event.location} | 📅 ${new Date(event.date).toLocaleDateString()}</p>
+              <p class="card-text">${event.description}</p>
+              <a href="pre_registration.html?event=${encodeURIComponent(event.name)}" class="btn btn-primary">Pre-Register Now</a>
+            </div>
+          </div>
+        `;
+
+        eventCard.innerHTML = eventHTML;
+        eventsGrid.appendChild(eventCard);
+      });
+    } catch (err) {
+      console.error("Error loading events:", err);
+      const eventsGrid = document.getElementById("eventsGrid");
+      eventsGrid.innerHTML = `<p class="text-danger">Failed to load events. Please try again later.</p>`;
+    }
+  }
+
+  loadEvents();
+</script>
+
+</body>
+</html>
