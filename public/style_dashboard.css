@@ -1,0 +1,89 @@
+/* ===== Admin Dashboard Styles ===== */
+
+/* General Container */
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* Dashboard Heading */
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* Row layout (Bootstrap-like if not using Bootstrap) */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.col-md-3, .col-md-6 {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Card Styles */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Background Variants */
+.bg-primary { background: #1ec6b6; }
+.bg-success { background: #28a745; }
+.bg-info    { background: #17a2b8; }
+.bg-danger  { background: #dc3545; }
+.bg-light   { background: #f8f9fa; color: #333; }
+
+/* Card Text */
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Lists inside cards */
+.card-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card-body ul li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.card-body ul li:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}

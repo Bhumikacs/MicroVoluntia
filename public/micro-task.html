@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose a Micro-Task - MicroVoluntia</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .task-card {
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .task-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-white shadow-sm">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="navbar-brand" href="index.html">
+      <img src="images/logo.png" width="40" class="me-2">
+    </a>
+    <div class="d-flex gap-2">
+      <a href="home.html" class="btn btn-outline-primary">Home</a>
+      <a href="my_task.html" class="btn btn-outline-primary">My Tasks</a>
+      <a href="login.html" class="btn btn-outline-primary">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Title -->
+<section class="text-center p-4 bg-light">
+  <h2 class="fw-bold">Choose a Micro-Task</h2>
+  <p class="text-muted">Pick a small activity that you can finish in a short time.</p>
+</section>
+
+<!-- Task List -->
+<div class="container py-5">
+  <div class="row g-4" id="taskList"></div>
+</div>
+
+<script>
+const API_BASE = "https://microvoluntia-1.onrender.com"; // Render-hosted backend
+const user = JSON.parse(localStorage.getItem("user"));
+
+// Redirect if user not logged in
+if (!user || !user.email) {
+  alert("Please login first!");
+  window.location.href = "login.html";
+}
+
+// Load admin tasks
+async function loadTasks() {
+  try {
+    const res = await fetch(`${API_BASE}/admin/tasks`);
+    if (!res.ok) throw new Error("Failed to fetch tasks");
+    const tasks = await res.json();
+
+    const taskListDiv = document.getElementById("taskList");
+    taskListDiv.innerHTML = "";
+
+    if (!tasks || tasks.length === 0) {
+      taskListDiv.innerHTML = "<p class='text-center text-muted'>No tasks available right now.</p>";
+      return;
+    }
+
+    tasks.forEach(t => {
+      const col = document.createElement("div");
+      col.classList.add("col-md-4");
+      col.innerHTML = `
+        <div class="task-card">
+          <h5>${t.taskName}</h5>
+          ${t.description ? `<p>${t.description}</p>` : ""}
+          ${t.deadline ? `<p><strong>Deadline:</strong> ${new Date(t.deadline).toLocaleDateString()}</p>` : ""}
+          <button class="btn btn-success" onclick="doTask('${t.taskName}')">Do This Task</button>
+        </div>`;
+      taskListDiv.appendChild(col);
+    });
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("taskList").innerHTML = "<p class='text-center text-danger'>Failed to load tasks. Please try again later.</p>";
+  }
+}
+
+// Assign task to user
+async function doTask(taskName) {
+  try {
+    const res = await fetch(`${API_BASE}/assign_task`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email, taskName })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert(`Task assigned successfully!`);
+      window.location.href = "my_task.html";
+    } else {
+      alert(data.message || "Error assigning task");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+}
+
+// Initial load
+loadTasks();
+</script>
+
+</body>
+</html>
