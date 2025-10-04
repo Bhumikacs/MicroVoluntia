@@ -1,0 +1,45 @@
+/* style_user.css */
+
+/* Table Styling */
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table-container th, 
+.table-container td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.table-container th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* Delete Button Styling */
+.delete-btn {
+  background-color: #e63946;  /* red */
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #d62839;  /* darker red */
+  transform: scale(1.05);
+}
+
+.delete-btn:active {
+  transform: scale(0.95);
+}
